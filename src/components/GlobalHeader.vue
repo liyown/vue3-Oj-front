@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import {routes} from '@/router/routes'
-import {computed, ref, watch} from 'vue';
-import {useRouter} from 'vue-router'
+import {computed, onMounted, ref, watch} from 'vue';
+import {useRouter, useRoute} from 'vue-router'
 import {useLoginUserStore} from "@/stores/loginUser";
+import access from "@/access/access";
 const router = useRouter()
+const route = useRoute()
 const loginUser = useLoginUserStore()
 
 // 过滤出需要显示的菜单
@@ -20,6 +22,10 @@ function doMenuEvent(key: string) {
 
 watch(() => router.currentRoute.value.path, (path) => {
   selectKey.value = [path]
+})
+
+onMounted(() => {
+  selectKey.value = [router.currentRoute.value.path]
 })
 
 const selectKey = ref(['/'])
@@ -41,7 +47,20 @@ const selectKey = ref(['/'])
         </a-menu>
       </a-col>
       <a-col flex="100px">
-        <div>{{loginUser.loginUser.name ?? "未登录" }}</div>
+        <div v-if="loginUser.loginUser.role === access.NO_LOGIN">
+          <a-button type="primary" @click="router.push('/user/login')">登录</a-button>
+        </div>
+        <div v-else>
+          <a-dropdown>
+            <a-button>
+              {{ loginUser.loginUser.name }}
+              <a-icon type="down"/>
+            </a-button>
+            <a-menu slot="overlay">
+              <a-menu-item key="1" @click="router.push('/user/login-out')">退出</a-menu-item>
+            </a-menu>
+          </a-dropdown>
+        </div>
       </a-col>
     </a-row>
 

@@ -1,11 +1,12 @@
 import access from "@/access/access";
 import {type RouteRecordRaw} from "vue-router";
+
 export const routes: RouteRecordRaw[] = [
     {
         path: '/',
         name: '题库',
         meta: {
-            auth: access.USER,
+            auth: access.NO_LOGIN
         },
         component: () => import("@/views/QuestionsView.vue")
     },
@@ -35,12 +36,31 @@ export const routes: RouteRecordRaw[] = [
         component: () => import('@/views/AdminView.vue')
     },
     {
-        path: '/login',
-        name: '登录',
+        path: '/user',
+        name: '用户界面',
         meta: {
-            auth: access.NO_LOGIN
+            auth: access.NO_LOGIN,
+            noDisplayMenu: true
         },
-        component: () => import('@/views/LoginView.vue')
+        component: () => import('@/layouts/LoginLayout.vue'),
+        children: [
+            {
+              path: '',
+              name: '用户',
+              component: () => import('@/views/user/UserView.vue')
+
+            },
+            {
+                path: 'login',
+                name: '登录',
+                component: () => import('@/views/user/LoginView.vue')
+            },
+            {
+                path: 'register',
+                name: '注册',
+                component: () => import('@/views/user/RegisterView.vue')
+            }
+        ]
     }
 ]
 

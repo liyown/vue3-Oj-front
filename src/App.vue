@@ -3,9 +3,11 @@ import BasicLayout from './layouts/BasicLayout.vue'
 import {onMounted} from "vue";
 import {UserControllerService} from "@/generated";
 import {useLoginUserStore} from "@/stores/loginUser";
+import {useRoute} from "vue-router";
+import LoginLayout from "@/layouts/LoginLayout.vue";
 
 const userStore = useLoginUserStore()
-
+const route = useRoute()
 const doInit = () => {
 
   UserControllerService.getLoginUser()
@@ -19,7 +21,7 @@ const doInit = () => {
 
 onMounted(() => {
   console.log('doinit')
-  doInit()
+  // doInit()
 })
 
 
@@ -27,7 +29,12 @@ onMounted(() => {
 
 <template>
   <div id="app">
-    <BasicLayout/>
+      <template v-if="route.path.startsWith('/user')">
+          <router-view/>
+      </template>
+      <template v-else>
+          <BasicLayout/>
+      </template>
   </div>
 
 </template>

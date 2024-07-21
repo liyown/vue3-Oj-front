@@ -1,5 +1,7 @@
 import axios from "axios";
 
+
+axios.defaults.withCredentials = true;
 axios.interceptors.request.use(
     (config) => {
         return config;
@@ -11,7 +13,6 @@ axios.interceptors.request.use(
 
 axios.interceptors.response.use(
     (response) => {
-        console.log(response);
         return response;
     },
     (error) => {

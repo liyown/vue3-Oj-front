@@ -16,14 +16,13 @@ async function autoLogin() {
         const loginUser = await UserControllerService.getLoginUser()
         loginUserStore.loginUser.name = loginUser?.data?.userName || '未登录'
         if (loginUser?.data?.userRole) {
-            if ( loginUser.data.userRole === 'user') {
+            if (loginUser.data.userRole === 'user') {
                 loginUserStore.loginUser.role = access.USER
             }
-            if ( loginUser.data.userRole === 'admin') {
+            if (loginUser.data.userRole === 'admin') {
                 loginUserStore.loginUser.role = access.ADMIN
             }
-        }
-        else {
+        } else {
             loginUserStore.loginUser.role = access.NO_LOGIN
         }
     }
@@ -31,7 +30,7 @@ async function autoLogin() {
 
 }
 
-router.beforeEach(async (to, from, next) => {
+router.beforeEach( async (to, from, next) => {
 
     const loginUserStore = useLoginUserStore()
 
@@ -40,13 +39,15 @@ router.beforeEach(async (to, from, next) => {
     if (to.meta.auth === access.NO_LOGIN) {
         console.log('不需要登录')
         next()
+        return
     }
 
     // 如果没有登录，且需要登录
     if (to.meta.auth >= access.USER && loginUserStore.loginUser.role === access.NO_LOGIN) {
         // 跳转到登录页面
-        console.log('no login')
-        next("/login")
+        console.log('未登录，跳转到登录页面')
+        next("/user/login?redirect=" + to.fullPath)
+        return
     }
 
     // 如果已经登录, 校验权限
@@ -54,12 +55,15 @@ router.beforeEach(async (to, from, next) => {
         if (checkAccess(loginUserStore.loginUser, to.meta.auth)) {
             console.log('权限通过')
             next()
-        }
-        else {
+            return
+        } else {
             console.log('权限不通过')
             next('/no-auth')
+            return
         }
     }
+    next()
+    return
 })
 
 
