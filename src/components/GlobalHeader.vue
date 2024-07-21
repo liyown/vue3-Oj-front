@@ -22,15 +22,11 @@ watch(() => router.currentRoute.value.path, (path) => {
   selectKey.value = [path]
 })
 
-setTimeout(()=>{
-  loginUser.loginUser.name = "刘耀文"
-}, 1000)
-
 const selectKey = ref(['/'])
 
 </script>
 <template>
-  <div class="header">
+  <div id="app">
     <a-row align="center">
       <a-col flex="auto">
         <a-menu mode="horizontal" @menu-item-click="doMenuEvent" :selected-keys="selectKey">
@@ -55,6 +51,7 @@ const selectKey = ref(['/'])
 
 
 <style scoped>
+
 #title {
   font-size: 24px;
   font-weight: bold;

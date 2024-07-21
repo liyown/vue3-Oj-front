@@ -1,11 +1,13 @@
-import { ref, computed, reactive } from 'vue'
+import {type Reactive, reactive} from 'vue'
+import access from "@/access/access";
 import { defineStore } from 'pinia'
+import type {loginUserInfo} from "@/ts-type/my_type";
 
 export const useLoginUserStore = defineStore('loginUser', () => {
 
-    const loginUser = reactive({
-        name: "未登录",
-        auth: false
+    const loginUser = reactive<loginUserInfo>({
+        name: '',
+        role: access.NO_LOGIN
     })
 
 
