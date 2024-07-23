@@ -12,7 +12,7 @@ import GlobalHeader from '@/components/GlobalHeader.vue'
       <a-layout-content id="content">
         <RouterView/>
       </a-layout-content>
-      <a-layout-footer id="footer">Designed by liuyaowen</a-layout-footer>
+<!--      <a-layout-footer id="footer">Designed by liuyaowen</a-layout-footer>-->
     </a-layout>
   </div>
 </template>
@@ -21,11 +21,11 @@ import GlobalHeader from '@/components/GlobalHeader.vue'
 
 #header {
   box-shadow: #eee 0 5px 5px 0;
-  margin-bottom: 24px;
+  margin-bottom: 4px;
 }
 
 #content {
-  background-color: #f0f2f5;
+  background-color: #fbfbfb;
 }
 
 #footer {

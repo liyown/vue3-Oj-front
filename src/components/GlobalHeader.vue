@@ -4,24 +4,27 @@ import {computed, onMounted, ref, watch} from 'vue';
 import {useRouter, useRoute} from 'vue-router'
 import {useLoginUserStore} from "@/stores/loginUser";
 import access from "@/access/access";
+import {checkAccess} from "@/access/checkAccess";
 const router = useRouter()
 const route = useRoute()
 const loginUser = useLoginUserStore()
 
 // 过滤出需要显示的菜单
 const displayMenu = computed(() => {
-  return routes.filter(route => route.meta?.noDisplayMenu === undefined)
+  return routes.filter(route => route.meta?.noDisplayMenu === undefined).filter(route => {
+    return checkAccess(loginUser.loginUser, route.meta?.auth ?? access.NO_LOGIN)
+  })
 })
 
 function doMenuEvent(key: string) {
-
+  console.log(key)
   router.push({
     path: key
   });
 }
 
 watch(() => router.currentRoute.value.path, (path) => {
-  selectKey.value = [path]
+  selectKey.value = ["/" + path.split('/')[1]]
 })
 
 onMounted(() => {
