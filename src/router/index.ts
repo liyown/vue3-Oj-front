@@ -4,6 +4,7 @@ import {useLoginUserStore} from "@/stores/loginUser";
 import {checkAccess} from "@/access/checkAccess";
 import access from "@/access/access";
 import {UserControllerService} from "@/generated";
+import {Message} from "@arco-design/web-vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,6 +16,7 @@ async function autoLogin() {
     if (loginUserStore.loginUser.role === access.NO_LOGIN) {
         const loginUser = await UserControllerService.getLoginUser()
         loginUserStore.loginUser.name = loginUser?.data?.userName || '未登录'
+        loginUserStore.loginUser.id = loginUser?.data?.id || 0
         if (loginUser?.data?.userRole) {
             if (loginUser.data.userRole === 'user') {
                 loginUserStore.loginUser.role = access.USER
@@ -25,6 +27,12 @@ async function autoLogin() {
         } else {
             loginUserStore.loginUser.role = access.NO_LOGIN
         }
+
+        Message.success({
+            content: '登录成功' + loginUserStore.loginUser.name,
+            duration: 1
+        })
+
     }
 
 

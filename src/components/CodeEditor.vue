@@ -38,5 +38,6 @@ const handleMount = (editor: any) => {
 <style scoped>
 #code-editor {
   height: 500px;
+  margin: 16px;
 }
 </style>
