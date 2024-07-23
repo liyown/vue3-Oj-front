@@ -74,6 +74,10 @@ const onDelete = (id: number) => {
   })
 }
 
+const onEnter = (id: number) => {
+  router.push({path: `/to/question/${id}`})
+}
+
 onMounted(
     () => {
       requestData()
@@ -96,7 +100,13 @@ onMounted(
             @delete="onDelete"
             @edit="onEdit"
             :pagination="pagination"
-        ></QuestionShow>
+        >
+
+          <template #action="{record}">
+            <a-button type="primary" @click="onEnter(record.id)">详情</a-button>
+          </template>
+
+        </QuestionShow>
       </a-layout-content>
     </a-layout>
   </div>

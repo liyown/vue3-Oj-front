@@ -96,7 +96,13 @@ onMounted(
             @delete="onDelete"
             @edit="onEdit"
             :pagination="pagination"
-        ></QuestionShow>
+        >
+          <template #action="{record}">
+            <a-button style="margin-right: 24px" type="primary" @click="$emit('edit', record.id)">编辑</a-button>
+            <a-button status="danger" @click="$emit('delete', record.id)">删除</a-button>
+          </template>
+
+        </QuestionShow>
       </a-layout-content>
     </a-layout>
   </div>
