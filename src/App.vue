@@ -4,6 +4,7 @@ import {onMounted} from "vue";
 import {UserControllerService} from "@/generated";
 import {useLoginUserStore} from "@/stores/loginUser";
 import {useRoute} from "vue-router";
+import ExercisesLayout from "@/layouts/ExercisesLayout.vue";
 
 const userStore = useLoginUserStore()
 const route = useRoute()
@@ -30,6 +31,9 @@ onMounted(() => {
   <div id="app">
       <template v-if="route.path.startsWith('/user')">
           <router-view/>
+      </template>
+      <template v-else-if="route.path.startsWith('/to')">
+          <ExercisesLayout/>
       </template>
       <template v-else>
           <BasicLayout/>

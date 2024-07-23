@@ -10,7 +10,7 @@ export type QuestionSubmitGetRequestPage = {
     id?: number;
     language?: string;
     status?: string;
-    questionId: number;
-    userid: number;
+    questionId?: number;
+    userid?: number;
 };
 

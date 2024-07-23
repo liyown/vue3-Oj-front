@@ -11,6 +11,16 @@ export const routes: RouteRecordRaw[] = [
         component: () => import("@/views/QuestionsView.vue")
     },
     {
+        path: '/to/question/:id',
+        name: '题目详情',
+        meta: {
+            auth: access.NO_LOGIN,
+            noDisplayMenu: true
+        },
+        component: () => import('@/layouts/ExercisesLayout.vue'),
+
+    },
+    {
         path: '/question',
         name: '题目编辑',
         meta: {
