@@ -1,10 +1,20 @@
 <script setup lang="ts">
+import CodeEditor from "@/components/CodeEditor.vue";
+import {ref, watch} from "vue";
+
+
+const value = ref<string>('asd')
+const language = ref<string>('java')
+
+watch(value, (v) => {
+  console.log(v)
+})
 
 </script>
 
 <template>
   <div>
-    管理员页面
+    <CodeEditor v-model:code="value"/>
   </div>
 </template>
 

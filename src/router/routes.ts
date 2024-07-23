@@ -11,29 +11,44 @@ export const routes: RouteRecordRaw[] = [
         component: () => import("@/views/QuestionsView.vue")
     },
     {
+        path: '/question',
+        name: '题目编辑',
+        meta: {
+            auth: access.ADMIN
+        },
+        component: () => import('@/views/question/QuestionView.vue'),
+        children: [
+            {
+                path: "",
+                name: "题目",
+                redirect(to) {
+                    return {name: "题目列表"}
+                },
+            },
+            {
+                path: "list",
+                name: "题目列表",
+                component: () => import('@/views/question/QuestionListView.vue')
+            },
+            {
+                path: "edit/:id",
+                name: "编辑题目",
+                component: () => import('@/views/question/QuestionEditView.vue')
+            },
+            {
+                path: "add",
+                name: "添加题目",
+                component: () => import('@/views/question/QuestionAddView.vue')
+            }
+            ]
+    },
+    {
         path: '/about',
         name: '关于',
         meta: {
             auth: access.NO_LOGIN
         },
         component: () => import('@/views/AboutView.vue')
-    },
-    {
-        path: '/no-auth',
-        name: '无权限',
-        meta: {
-            auth: access.NO_LOGIN,
-            noDisplayMenu: true
-        },
-        component: () => import('@/views/NoAuthView.vue')
-    },
-    {
-        path: '/admin',
-        name: '管理员',
-        meta: {
-            auth: access.ADMIN
-        },
-        component: () => import('@/views/AdminView.vue')
     },
     {
         path: '/user',

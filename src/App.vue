@@ -4,7 +4,6 @@ import {onMounted} from "vue";
 import {UserControllerService} from "@/generated";
 import {useLoginUserStore} from "@/stores/loginUser";
 import {useRoute} from "vue-router";
-import LoginLayout from "@/layouts/LoginLayout.vue";
 
 const userStore = useLoginUserStore()
 const route = useRoute()
