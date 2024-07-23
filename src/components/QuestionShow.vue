@@ -11,7 +11,7 @@
       </a-tag>
     </template>
     <template #action="{ record }">
-      <a-button style="margin-right: 24px" type="primary" @click="$emit('edit', record.id)">详情</a-button>
+      <slot name="action" :record="record"></slot>
     </template>
   </a-table>
 </template>
@@ -19,7 +19,7 @@
 <script setup lang="ts">
 
 import type {PaginationProps, TableData} from "@arco-design/web-vue";
-import router from "@/router";
+
 import type {QuestionVO} from "@/generated";
 
 
