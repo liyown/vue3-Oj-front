@@ -1,46 +1,44 @@
 <script setup lang="ts">
 import {useLoginUserStore} from "@/stores/loginUser";
+import access from "@/access/access";
+import {Message} from "@arco-design/web-vue";
+import router from "@/router";
 
-const userStore = useLoginUserStore()
+const loginUser = useLoginUserStore()
+
+const onLoginOut = () => {
+  loginUser.loginOut()
+  router.push('/')
+}
+
 </script>
 
 <template>
   <div class="layout">
-    <a-layout style="">
-      <a-comment id="user-info-title">
-        用户界面
-      </a-comment>
-      <a-layout-content id="content">
-        <RouterView/>
-      </a-layout-content>
-      <a-layout-footer id="footer">Designed by liuyaowen</a-layout-footer>
-    </a-layout>
+    <a-row class="grid-demo" style="margin-top: 16px;">
+      <a-col flex="100px">
+        <a-button style="margin-left: 24px" shape="round" type="primary" @click="router.push('/')">首页</a-button>
+      </a-col>
+      <a-col flex="auto">
+      </a-col>
+      <a-col flex="100px">
+        <div v-if="loginUser.loginUser.role === access.NO_LOGIN">
+          <a-button type="primary" @click="router.push('/user/login')">登录</a-button>
+        </div>
+        <div v-else>
+          <a-dropdown>
+            <a-button>{{ loginUser.loginUser.name }}</a-button>
+            <template #content>
+              <a-doption @click="onLoginOut">退出登录</a-doption>
+            </template>
+          </a-dropdown>
+        </div>
+      </a-col>
+    </a-row>
+    <RouterView/>
   </div>
 </template>
 
 <style scoped>
-#user-info-title {
-  font-size: 24px;
-  text-align: center;
-  margin-bottom: 24px;
-  font-weight: bold;
-}
 
-#content {
-  //background-color: #f0f2f5;
-  //height: auto;
-}
-
-#footer {
-  /* background-color: #001529; */
-  text-align: center;
-  font-size: 12px;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-
-
-
-}
 </style>

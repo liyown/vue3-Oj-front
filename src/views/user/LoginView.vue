@@ -11,14 +11,14 @@
         <a-input-password v-model="form.userPassword" placeholder="密码不少于8位"/>
       </a-form-item>
       <a-form-item>
-        <a-button html-type="submit">Submit</a-button>
+        <a-button html-type="submit" :loading="loading">登录</a-button>
       </a-form-item>
     </a-form>
   </div>
 </template>
 
 <script setup lang="ts">
-import {reactive} from 'vue';
+import {reactive, ref} from 'vue';
 import {UserControllerService} from "@/generated";
 import {useLoginUserStore} from "@/stores/loginUser";
 import access from "@/access/access";
@@ -32,32 +32,43 @@ const form = reactive({
   userAccount: '',
   userPassword: '',
 });
+const loading = ref(false);
 const handleSubmit = async () => {
-  let res = await UserControllerService.userLogin(form)
-  if (res.code === 0) {
-    userStore.loginUser.name = res.data?.userName as string
-    if (res.data?.userRole === 'admin') {
-      userStore.loginUser.role = access.ADMIN
-    } else {
-      userStore.loginUser.role = access.USER
-    }
-    if (route.query.redirect) {
-      await router.push({
-        path: route.query.redirect as string,
-        replace: true
-      })
-    } else {
-      await router.push({
-        path: "/",
-        replace: true
-      })
-    }
+  try {
+    loading.value = true
+    let res = await UserControllerService.userLogin(form)
+    if (res.code === 0) {
+      userStore.loginUser.name = res.data?.userName as string
+      if (res.data?.userRole === 'admin') {
+        userStore.loginUser.role = access.ADMIN
+      } else {
+        userStore.loginUser.role = access.USER
+      }
+      if (route.query.redirect) {
+        await router.push({
+          path: route.query.redirect as string,
+          replace: true
+        })
+      } else {
+        await router.push({
+          path: "/",
+          replace: true
+        })
+      }
 
-    console.log('登录成功')
-  } else {
-    console.log('登录失败')
-    Message.error("登录失败")
+      console.log('登录成功')
+    } else {
+      console.log('登录失败')
+      Message.error("登录失败")
+      loading.value = false
+    }
+  } catch (e:any) {
+    console.log(e)
+    Message.error("登录失败: " + e.message)
+    loading.value = false
+    return
   }
+
 };
 
 </script>
