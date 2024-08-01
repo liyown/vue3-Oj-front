@@ -6,3 +6,4 @@ export type loginUserInfo = {
     role: number
 }
 
+export type LoadingStatus = "loading" | "success" | "error"

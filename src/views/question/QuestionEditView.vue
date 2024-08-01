@@ -4,8 +4,6 @@ import {Message} from '@arco-design/web-vue';
 import {
   IconCaretRight,
   IconCaretLeft,
-  IconHome,
-  IconCalendar,
 } from '@arco-design/web-vue/es/icon';
 import MDEditor from "@/components/MDEditor.vue";
 import CodeEditor from "@/components/CodeEditor.vue";
@@ -60,7 +58,10 @@ let question = ref<QuestionUpdateRequest>({
 });
 
 const route = useRoute();
-const questionId = parseInt(route.params.id[0])
+const questionId = parseInt(route.params.id)
+const language = ref('java');
+const options = ref<string[]>(['java', 'python', 'c++', 'javascript','html'])
+
 
 onMounted(() => {
   QuestionControllerService.getRawQuestion({id: questionId}).then(res => {
@@ -110,6 +111,10 @@ onMounted(() => {
             <IconCaretLeft v-else/>
           </a-button>
 
+          <span id="text-language">选择语言:</span>
+          <a-select v-model="language" style="width: 200px; border: #1890ff 1px dot-dash; border-radius: 5px"  >
+            <a-option v-for="item in options" :key="item" :value="item">{{ item }}</a-option>
+          </a-select>
 
           <a-button type="primary" @click="onsubmit" style="float: right; margin: 8px 48px 0 0 ">
             提交
@@ -217,7 +222,7 @@ onMounted(() => {
             </a-table>
           </a-layout-content>
           <a-layout-content v-else-if="currentKey === '0_4'">
-            <CodeEditor v-model:code="question.answer"/>
+            <CodeEditor v-model:code="question.answer" :language="language"/>
           </a-layout-content>
         </a-layout>
       </a-layout>
@@ -231,8 +236,10 @@ onMounted(() => {
   background: var(--color-fill-2);
   border: 1px solid var(--color-border);
 }
-
-.layout-demo :deep(.arco-layout-content) {
-
+#text-language {
+  margin: 0 24px;
+  text-align: center;
+  font-weight: bold;
+  font-family: "JetBrains Mono", monospace;
 }
 </style>

@@ -5,7 +5,7 @@ import CodeEditor from "@/components/CodeEditor.vue";
 import {Message} from "@arco-design/web-vue";
 import QuestionSubmitRecord from "@/components/QuestionSubmitRecord.vue";
 
-const options = ref<string[]>(['java', 'python', 'c++', 'javascript'])
+const options = ref<string[]>(['java', 'python', 'c++', 'javascript','html'])
 
 const handleChange = (value: any) => {
   console.log(value)
@@ -78,10 +78,10 @@ onMounted(() => {
       </a-radio-group>
     </a-space>
     <template v-if="switchValue === 'exercise'">
-      <CodeEditor v-model:code="questionSubmit.code"/>
+      <CodeEditor v-model:code="questionSubmit.code" :language="questionSubmit.language ?? 'java'"/>
     </template>
     <template v-else>
-      <QuestionSubmitRecord :question-id="props.questionId"/>
+      <QuestionSubmitRecord :question-id="props.questionId" :user-id="0"/>
     </template>
   </div>
 </template>

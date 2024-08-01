@@ -1,19 +1,24 @@
 <template>
-  <a-table :columns="columns"
-           :data="data"
-           @pageChange="onPageChange"
-           @pageSizeChange="onPageSizeChange"
-           :pagination="pagination.pagination"
-  >
-    <template #optional="{ record }">
-      <a-tag v-for="tag in record.tags" :key="tag.id" :color="getColor(tag)">
-        {{ tag }}
-      </a-tag>
-    </template>
-    <template #action="{ record }">
-      <slot name="action" :record="record"></slot>
-    </template>
-  </a-table>
+  <div id="table-data-show">
+
+
+      <a-table :columns="columns"
+               :data="data"
+               @pageChange="onPageChange"
+               @pageSizeChange="onPageSizeChange"
+               :pagination="pagination.pagination"
+      >
+        <template #optional="{ record }">
+          <a-tag v-for="tag in record.tags" :key="tag.id" :color="getColor(tag)">
+            {{ tag }}
+          </a-tag>
+        </template>
+        <template #action="{ record }">
+          <slot name="action" :record="record"></slot>
+        </template>
+      </a-table>
+
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -21,6 +26,10 @@
 import type {PaginationProps, TableData} from "@arco-design/web-vue";
 
 import type {QuestionVO} from "@/generated";
+import LoadingWrap from "@/components/LoadingWrap.vue";
+import {ref} from "vue";
+import {type LoadingStatus } from "@/ts-type/my_type";
+
 
 
 // 组件属性
@@ -38,7 +47,7 @@ const pagination = defineProps({
     }),
   }
 })
-const emit = defineEmits(['pageChange', 'pageSizeChange', 'delete', 'edit'])
+const emit = defineEmits(['pageChange', 'pageSizeChange'])
 
 
 
@@ -51,9 +60,6 @@ const columns = [{
 }, {
   title: '标签',
   slotName: 'optional'
-}, {
-  title: '内容',
-  dataIndex: 'content',
 },{
   title: '操作',
   slotName: 'action',

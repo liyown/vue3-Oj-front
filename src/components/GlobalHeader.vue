@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import {routes} from '@/router/routes'
 import {computed, onMounted, ref, watch} from 'vue';
-import {useRouter, useRoute} from 'vue-router'
+import {useRouter} from 'vue-router'
 import {useLoginUserStore} from "@/stores/loginUser";
 import access from "@/access/access";
 import {checkAccess} from "@/access/checkAccess";
+
 const router = useRouter()
-const route = useRoute()
 const loginUser = useLoginUserStore()
 
 // 过滤出需要显示的菜单
@@ -21,6 +21,11 @@ function doMenuEvent(key: string) {
   router.push({
     path: key
   });
+}
+
+const onLoginOut = () => {
+  loginUser.loginOut()
+  router.push('/')
 }
 
 watch(() => router.currentRoute.value.path, (path) => {
@@ -55,13 +60,12 @@ const selectKey = ref(['/'])
         </div>
         <div v-else>
           <a-dropdown>
-            <a-button>
-              {{ loginUser.loginUser.name }}
-              <a-icon type="down"/>
-            </a-button>
-            <a-menu slot="overlay">
-              <a-menu-item key="1" @click="router.push('/user/login-out')">退出</a-menu-item>
-            </a-menu>
+            <a-button>{{ loginUser.loginUser.name }}</a-button>
+            <template #content>
+              <!--todo-->
+              <a-doption @click="router.push('/user')">个人主页</a-doption>
+              <a-doption @click="onLoginOut">退出登录</a-doption>
+            </template>
           </a-dropdown>
         </div>
       </a-col>

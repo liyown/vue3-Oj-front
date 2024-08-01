@@ -11,7 +11,13 @@ export const useLoginUserStore = defineStore('loginUser', () => {
         role: access.NO_LOGIN
     })
 
+    const loginOut = () => {
+        loginUser.id = 0
+        loginUser.name = ''
+        loginUser.role = access.NO_LOGIN
+    }
 
 
-    return  {loginUser }
+
+    return  {loginUser, loginOut }
 })

@@ -14,7 +14,7 @@ const route = useRoute()
             <QuestionDetail/>
         </a-layout-sider>
         <a-layout-content>
-          <QuestionWriter :question-id="parseInt(route.params.id[0])"/>
+          <QuestionWriter :question-id="parseInt(route.params.id)"/>
         </a-layout-content>
       </a-layout>
     </a-layout>

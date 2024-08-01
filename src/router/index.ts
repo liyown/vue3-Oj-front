@@ -42,13 +42,14 @@ router.beforeEach( async (to, from, next) => {
 
     const loginUserStore = useLoginUserStore()
 
-    await autoLogin()
 
     if (to.meta.auth === access.NO_LOGIN) {
         console.log('不需要登录')
         next()
         return
     }
+
+    await autoLogin()
 
     // 如果没有登录，且需要登录
     if (to.meta.auth >= access.USER && loginUserStore.loginUser.role === access.NO_LOGIN) {

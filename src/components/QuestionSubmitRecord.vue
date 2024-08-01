@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {onMounted, reactive, ref} from "vue";
+import {onMounted, reactive, ref, watch} from "vue";
 import {
   QuestionSubmitControllerService,
   type QuestionSubmitGetRequestPage, type QuestionSubmitVO,
@@ -10,20 +10,26 @@ import {type DescData, Message} from "@arco-design/web-vue";
 import CodeEditor from "@/components/CodeEditor.vue";
 
 const data = ref<Array<QuestionSubmitVO>>([])
-const route = useRoute()
-const userStore = useLoginUserStore()
 
-const columns = [{
-  title: '语言',
-  dataIndex: 'language',
+const columns = [
+  {
+    title: '提交ID',
+    dataIndex: 'id',
+  },{
+      title: '题目ID',
+      dataIndex: 'questionId',
+  },
+  {
+    title: '语言',
+    dataIndex: 'language',
 
-}, {
-  title: '状态',
-  dataIndex: 'status'
-}, {
-  title: '操作',
-  slotName: 'action',
-}];
+  }, {
+    title: '状态',
+    dataIndex: 'status'
+  }, {
+    title: '操作',
+    slotName: 'action',
+  }];
 
 
 const requestBody: QuestionSubmitGetRequestPage = {
@@ -49,7 +55,7 @@ function requestData() {
       Message.error(res.message as string)
     }
     data.value = res.data?.records ?? []
-    pagination.total = res.data?.total as number
+    pagination.total = res.data?.total ?? 0
 
   })
 }
@@ -65,9 +71,27 @@ const onPageSizeChange = (pageSize: number) => {
 }
 
 
+const props = defineProps<{
+  questionId: number
+  userId: number
+}>()
+
+const reset = () => {
+  pagination.current = 1
+  pagination.pageSize = 10
+  requestData()
+
+  console.log("asdas")
+}
+
+defineExpose({
+  reset
+})
+
+
 onMounted(() => {
-  requestBody.questionId = parseInt(route.params.id[0])
-  requestBody.userid = userStore.loginUser.id
+  requestBody.questionId = props.questionId
+  requestBody.userid = props.userId === 0 ? undefined : props.userId
   QuestionSubmitControllerService.listSubmitVo(requestBody).then(res => {
     if (res.code !== 0) {
       Message.error(res.message as string)
@@ -77,6 +101,16 @@ onMounted(() => {
 
   })
 })
+
+watch(() => props.questionId, (newVal) => {
+  requestBody.questionId = newVal
+  pagination.current = 1
+  requestData()
+})
+
+
+
+
 // 抽屉
 const drawerData = ref<QuestionSubmitVO>()
 const descriptionData = ref<DescData[]>()
@@ -89,9 +123,6 @@ const handleDescription = (data: QuestionSubmitVO): DescData[] => {
       label: '语言',
       value: data.language ?? ''
     }, {
-      label: "判题结果",
-      value: data.judgeInfo?.message ?? ''
-    }, {
       label: "使用内存",
       value: data.judgeInfo?.memory ?? ''
     }, {
@@ -100,6 +131,7 @@ const handleDescription = (data: QuestionSubmitVO): DescData[] => {
     }
   ]
 }
+
 
 const onclick = (id: number) => {
   QuestionSubmitControllerService.get({id: id}).then(res => {
@@ -137,6 +169,7 @@ const showDrawer = () => {
              @pageChange="onPageChange"
              @pageSizeChange="onPageSizeChange"
              :pagination="pagination"
+
     >
       <template #action="{record}">
         <a-button type="primary" @click="onclick(record.id)">查看</a-button>
@@ -154,14 +187,15 @@ const showDrawer = () => {
         unmountOnClose
     >
       <template #title>
-        <div  style="margin-left: 24px">
-            提交详情
+        <div style="margin-left: 24px">
+          提交详情
         </div>
       </template>
-      <CodeEditor v-model:code="drawerData.code"></CodeEditor>
-      <a-space size="mini" style="margin-left: 24px">
+      <CodeEditor style="height: 360px;" v-model:code="drawerData.code"></CodeEditor>
         <a-descriptions :data="descriptionData" title="判题结果" bordered/>
-      </a-space>
+        <a-card :style="{marginTop:'12px'}" title="判题详情">
+          {{drawerData?.judgeInfo?.message}}
+        </a-card>
     </a-drawer>
   </div>
 </template>

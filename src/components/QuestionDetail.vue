@@ -24,7 +24,7 @@ onMounted(() => {
     question.value = res.data
     data  = [
       {
-        label: '题目编号',
+        label: '题目编号:',
         value: question.value?.id
       },
       {
@@ -32,15 +32,15 @@ onMounted(() => {
         value: question.value?.tags
       },
       {
-        label: '提交',
+        label: '提交:',
         value: question.value?.submitNum ?? 0,
       },
       {
-        label: '收藏',
+        label: '收藏:',
         value: question.value?.thumbNum ?? 0,
       },
       {
-        label: '喜欢',
+        label: '喜欢:',
         value: question.value?.favourNum ?? 0,
       },
     ];
@@ -56,19 +56,30 @@ onMounted(() => {
 <template>
   <div id="question-detail">
     <a-space direction="vertical" size="large" fill>
-      <a-button style="margin-top: 12px" type="primary" size="mini" @click="router.push('/')">主页</a-button>
+      <a-button style="margin-top: 12px" type="secondary" size="mini" @click="router.push('/')">主页</a-button>
       <a-descriptions :data="data" :title="question?.title" layout="inline-horizontal" >
         <template #value="{data}">
           <template v-if="data.label==='标签'">
-            <a-tag style="margin-right: 4px" v-for="item in data.value" :key="item" color="green">{{item}}</a-tag>
+            <a-tag style="margin:0 4px" v-for="item in data.value" :key="item" color="green">{{item}}</a-tag>
           </template>
           <template v-else>
-            <span style="color: #1890ff">{{data.value}}</span>
+            <span style="color: #1890ff; margin-left: 16px">{{data.value}}</span>
           </template>
         </template>
       </a-descriptions>
 
       <a-divider>题目详情</a-divider>
+      <a-row class="grid-demo">
+        <a-col :xs="{span: 6, offset: 1}" :lg="{span: 6, offset: 2}">
+          <a-tag color="blue">时间限制: {{question?.judgeConfig.timeLimit}}ms</a-tag>
+        </a-col>
+        <a-col :xs="{span: 6, offset: 1}" :lg="{span: 6, offset: 2}">
+          <a-tag color="blue">内存限制: {{question?.judgeConfig.memoryLimit}}KB</a-tag>
+        </a-col>
+        <a-col :xs="{span: 6, offset: 1}" :lg="{span: 6, offset: 2}">
+          <a-tag color="blue">堆栈限制: {{question?.judgeConfig.stackLimit}}KB</a-tag>
+        </a-col>
+      </a-row>
       <Viewer :value="question?.content" />
     </a-space>
   </div>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import QueryCondition from "@/components/QueryCondition.vue";
-import QuestionShow from "@/components/QuestionShow.vue";
+import QuestionShow from "@/components/TableDataShow.vue";
 import {QuestionControllerService, type QuestionGetRequestPage, type QuestionVO} from "@/generated";
 import {onMounted, ref} from "vue";
 import {Message} from "@arco-design/web-vue";
@@ -86,20 +86,24 @@ onMounted(
   <div id="question-list">
     <a-layout style="height: 400px;">
       <a-layout-header id="header">
-        <QueryCondition @filter="onFilter"></QueryCondition>
+        <QueryCondition @filter="onFilter">
+          <template #default >
+            <a-button type="primary" @click="router.push('/question/add')">新增</a-button>
+          </template>
+
+
+        </QueryCondition>
       </a-layout-header>
       <a-layout-content>
         <QuestionShow
             v-model:data="data"
             @pageSizeChange="onPageSizeChange"
             @pageChange="onPageChange"
-            @delete="onDelete"
-            @edit="onEdit"
             :pagination="pagination"
         >
           <template #action="{record}">
-            <a-button style="margin-right: 24px" type="primary" @click="$emit('edit', record.id)">编辑</a-button>
-            <a-button status="danger" @click="$emit('delete', record.id)">删除</a-button>
+            <a-button style="margin-right: 24px" type="primary" @click="onEdit(record.id)">编辑</a-button>
+            <a-button status="danger" @click="onDelete(record.id)">删除</a-button>
           </template>
 
         </QuestionShow>

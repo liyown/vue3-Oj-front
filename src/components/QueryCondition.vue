@@ -20,18 +20,18 @@ const emit = defineEmits(['filter'])
 
   <div id="query-condition">
 
-    <a-row id="grid-demo" style="margin-bottom: 16px;">
-      <a-col flex="auto">
+    <a-row id="grid-demo" style="padding-left: 32px ">
+      <a-col flex="auto" >
         <a-tag color="blue">题目内容:</a-tag>
-        <a-input v-model="condition.title" :style="{width:'200px'}" placeholder="请输入题目内容"/>
+        <a-input  style="margin: 0 16px" v-model="condition.title" :style="{width:'200px'}" placeholder="请输入题目内容"/>
 
         <a-tag color="blue">题目标签:</a-tag>
-        <a-input-tag v-model="condition.tags" :style="{width:'200px'}" placeholder="请输入标签" allow-clear/>
+        <a-input-tag style="margin: 0 16px" v-model="condition.tags" :style="{width:'200px'}" placeholder="请输入标签" allow-clear/>
 
         <a-button @click="onFilter" type="outline">查询</a-button>
       </a-col>
       <a-col flex="100px">
-        <a-button type="primary" @click="router.push('/question/add')">新增</a-button>
+        <slot ></slot>
       </a-col>
     </a-row>
   </div>

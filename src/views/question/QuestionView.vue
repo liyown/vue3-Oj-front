@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {useRouter} from 'vue-router'
 import QueryCondition from "@/components/QueryCondition.vue";
-import QuestionShow from "@/components/QuestionShow.vue";
+import QuestionShow from "@/components/TableDataShow.vue";
 import AddQuestionView from "@/views/question/QuestionAddView.vue";
 
 const router = useRouter()
